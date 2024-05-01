@@ -1,3 +1,13 @@
+# Referencias:
+# https://prettymapp.streamlit.app
+# https://public.tableau.com/app/profile/filippo.mastroianni/viz/GameofThrones-ScreenTimeAnalysis/GOTHomepage
+# # Ilustra um gráfico de mortes acumuladas por episódio, interativo
+# https://public.tableau.com/app/profile/christopher.conn/viz/GameofThronesDeathNetwork/Dashboard1
+# # gráfico em círculo ilustrando os personagens que mais mataram, a arma utilizada e quando
+# https://public.tableau.com/app/profile/samodrole/viz/GameofThroneskillings/GOTDeaths
+# # Mapa de westeros
+# https://public.tableau.com/app/profile/anmol4653/viz/WarofThronesGameofthrones/Warofthrones
+
 # %% [markdown]
 # # CD008 Ex02 - Gráficos com a API Altair
 # 
@@ -47,21 +57,58 @@ def pag_dados():
 def pag_execucoes():
     st.title("Execuções:")
     # # Qual a casa/facção que mais causou mortes?
-    tipo_execucao = st.selectbox("Execução por: ", ['Indivíduo','Casa'])
+    # tipo_execucao = st.selectbox("Execução por: ", ['Indivíduo','Casa'])
 
-    st.tabs(["Casa",["Individuo"]])
-    
-    if tipo_execucao == 'Indivíduo':
-        opcao = 'killer'
-    else:
+    aba_exec_casa,aba_exec_individuo,aba_exec_relacionamento = st.tabs(["Casa","Individuo","Relacionamento"])
+    with aba_exec_casa:
         opcao = 'killers_house'
+        print(opcao)
+        st.altair_chart(plotKillerMethod(deaths_df, opcao,), use_container_width=True, theme="streamlit")
+    with aba_exec_individuo:
+        opcao = 'killer'
+        st.altair_chart(plotKillerMethod(deaths_df, opcao,), use_container_width=True, theme="streamlit")
+    with aba_exec_relacionamento:
+        nomes = list(deaths_df['name'].unique())
+        assassinos = list(deaths_df['killer'].unique())
+        locais = list(deaths_df['location'].unique())
+        metodos = list(deaths_df['method'].unique())
+        # vitima = st.multiselect('Seleção de Vítimas',nomes)
+        # assassino = st.multiselect('Seleção de Assassínos',assassinos)
+        # localizacao = st.multiselect('Seleção de Locais',locais)
+        # metodo = st.multiselect('Seleção de Métodos',metodos)
+        # Create four columns with equal width
+        col1, col2, col3, col4 = st.columns(4)
         
-    st.altair_chart(plotKillerMethod(deaths_df, opcao,), use_container_width=False, theme="streamlit")
+        # Assign each Streamlit object to a separate column
+        with col1:
+            vitima = st.multiselect('Seleção de Vítimas', nomes)
+        with col2:
+            assassino = st.multiselect('Seleção de Assassínos', assassinos)
+        with col3:
+            localizacao = st.multiselect('Seleção de Locais', locais)
+        with col4:
+            metodo = st.multiselect('Seleção de Métodos', metodos)
+        
+        df_exec_tmp = deaths_df[deaths_df['name'].isin(vitima)]
+        st.altair_chart(plotScatterKill(df_exec_tmp), use_container_width=False, theme="streamlit")
+
+        
+        
+    
 
 
 def pag_alianças():
     # %% [markdown]
     # Qualquer um que tenha acompanhado a série sabe o estrago que um dragão consegue fazer. Daí temos a casa Targaryen em primeiro lugar com o maior número de mortes causadas por fogo do dragão. Podemos plotar um gráfico de barras que mostra especificamente quais alianças foram afetadas:
+
+    df_temp = deaths_df[(deaths_df['killers_house']=='House Targaryen') & (deaths_df['method']=='Dragonfire (Dragon)')]
+
+    aba_alianca_casa,aba_alianca_individuo = st.tabs(["Casa","Individuo"])
+    with aba_alianca_casa:
+        st.altair_chart(deathsByAllegiance(deaths_df), use_container_width=False, theme="streamlit")
+    with aba_alianca_individuo:
+        opcao = 'killer'
+
     
     # %%
     df_temp = deaths_df[(deaths_df['killers_house']=='House Targaryen') & (deaths_df['method']=='Dragonfire (Dragon)')]
@@ -69,8 +116,8 @@ def pag_alianças():
     
     # %%
     
-    deathsByAllegiance(df_temp)
-    st.altair_chart(deathsByAllegiance(df_temp), use_container_width=False, theme="streamlit")
+    # deathsByAllegiance(df_temp)
+    # st.altair_chart(deathsByAllegiance(df_temp), use_container_width=False, theme="streamlit")
     
     # %% [markdown]
     # E assim vemos que poder dos dragões foi utilizado mais nas últimas temporadas.
@@ -86,18 +133,13 @@ def pag_alianças():
     df_temp = deaths_df[(deaths_df['killer']=='Cersei Lannister') & (deaths_df['method']=='Wildfire')]
     # df_temp
     
-    # %%
-    # deathsByAllegiance(df_temp)
-    st.altair_chart(deathsByAllegiance(df_temp), use_container_width=False, theme="streamlit")
-    
-    
     # %% [markdown]
     # # Quem matou quem, usando qual método?
     
     # %%
     
     # plotScatterKill(deaths_df)
-    st.altair_chart(plotScatterKill(deaths_df), use_container_width=False, theme="streamlit")
+    # st.altair_chart(plotScatterKill(deaths_df), use_container_width=False, theme="streamlit")
     
     # %% [markdown]
     # # Qual família/facção sofreu mais baixas ao longo das temporadas?
