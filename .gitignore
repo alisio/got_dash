@@ -59,6 +59,8 @@ target/
 # DotEnv configuration
 .env
 
+*.ipynb
+
 # Database
 *.db
 *.rdb
