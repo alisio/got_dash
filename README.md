@@ -1,5 +1,6 @@
 # Introduction
-The Game of Thrones Dashboard is an educational web application designed for Game of Thrones enthusiasts and Python developers. It provides an interactive and user-friendly interface to explore and analyze a comprehensive dataset containing information about characters, houses, books, and seasons.
+
+This Game of Thrones Dashboard is an educational web application designed for Game of Thrones enthusiasts and Python developers. It provides an interactive and user-friendly interface to explore and analyze a comprehensive dataset containing information about characters, houses, books, and seasons.
 
 Built with Python and Streamlit, this application demonstrates how to create data-driven web applications for educational purposes.
 
