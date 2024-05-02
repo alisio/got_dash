@@ -1,36 +1,3 @@
-# Referencias:
-# https://prettymapp.streamlit.app
-# https://public.tableau.com/app/profile/filippo.mastroianni/viz/GameofThrones-ScreenTimeAnalysis/GOTHomepage
-# # Ilustra um gráfico de mortes acumuladas por episódio, interativo
-# https://public.tableau.com/app/profile/christopher.conn/viz/GameofThronesDeathNetwork/Dashboard1
-# # gráfico em círculo ilustrando os personagens que mais mataram, a arma utilizada e quando
-# https://public.tableau.com/app/profile/samodrole/viz/GameofThroneskillings/GOTDeaths
-# # Mapa de westeros
-# https://public.tableau.com/app/profile/anmol4653/viz/WarofThronesGameofthrones/Warofthrones
-
-# %% [markdown]
-# # CD008 Ex02 - Gráficos com a API Altair
-# 
-# Equipe:
-# * Antonio Alisio de Meneses Cordeiro
-# * Jeferson Jose de Miranda
-# * Salvador Vicente Grisolia
-
-# %% [markdown]
-# # Dataset
-# 
-# Este caderno está focado no dataset de mortes sobre a série de TV Game of Thrones. O enredo fictício dessa série trata da dispuda de poder entre várias famílias e outros agrupamentos ou alianças que nesse caderno vamos chamar de facções. Devido à natureza dessa disputa, várias baixas vão ocorrer ao longo dos episódios. As perguntas que podem surgir nesse sentido envolvem: Qual o personagem que mais causou mortes? Qual foi o método mais utilizado para este fim? Qual casa/facção sofreu mais baixas? Vamos fazer uma análise com o auxílio da biblioteca Altair.
-# 
-# Disponível em: https://data.world/makeovermonday/2019w27
-
-# Download do dataset.
-
-# import gdown
-
-# url = 'https://drive.google.com/uc?id=1Eq29Li01ivCukkgOKLbxJYG3RQXG6eL7'
-# gdown.download(url, 'deaths.csv')
-
-
 import os
 import requests
 import streamlit as st
