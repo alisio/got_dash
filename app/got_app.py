@@ -38,8 +38,10 @@ import pandas as pd
 import altair as alt
 import got_lib
 from got_lib import plotKillerMethod,deathsByAllegiance,plotScatterKill
+import sys
 
-deaths_df = pd.read_csv('deaths.csv')
+
+deaths_df = pd.read_csv('./data/deaths.csv')
 
 # Nesse dataset temos os nome de quem morreu, sua família/facção, a temporada, o número do episódio, o assassino, a família/facção do assassino, o método do assassinato e a contagem ordenada da morte. Vemos que alguns valoers não estão definidos, vamos resolver isso substituindo NaN por string vazia.
 
@@ -49,9 +51,18 @@ deaths_df = deaths_df.fillna('')
 
 
 def pag_dados():
-    st.title("Dados")
+    # st.title("Dados")
     # Add code for rendering data and interactivity specific to Page 1
-    deaths_df
+    # deaths_df
+    tabbed_pages = st.tabs(["Executor", "Casa"])
+
+    with tabbed_pages[0]:
+        import exec_nome
+        del sys.modules['exec_nome']
+
+    with tabbed_pages[1]:
+        import exec_casa
+        del sys.modules['exec_casa']
 
 
 def pag_execucoes():
