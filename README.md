@@ -5,6 +5,8 @@ This Game of Thrones Dashboard is an educational web application designed for Ga
 Built with Python and Streamlit, this application demonstrates how to create data-driven web applications for educational purposes.
 
 
+
+
 # Build
 
 Build for a single architecture:
