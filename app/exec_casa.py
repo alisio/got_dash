@@ -34,6 +34,8 @@ top_executores_casa.columns = ["Executor","Contagem"]
 top_metodos_casa = deaths_df['method'].value_counts().reset_index()
 top_metodos_casa.columns = ["Metodo","Contagem"]
 
+top_baixas_casa = deaths_df['allegiance'].value_counts().reset_index()
+top_baixas_casa.columns = ["Baixas","Contagem"]
 
 
 casa_col1, casa_col2, casa_col3, casa_col4 = st.columns(4)
@@ -59,6 +61,11 @@ with casa_col3:
     num_execucoes = len(deaths_df[deaths_df["killers_house"] == casa ])
     st.markdown("### Execuções:")
     st.markdown(f"## {num_execucoes}")
+    # numero de baixas
+    num_baixas = len(deaths_df[deaths_df["allegiance"] == casa ])
+    st.markdown("### Baixas:")
+    st.markdown(f"## {num_baixas}")
+
     
 with casa_col4:
     st.markdown("### Métodos:")
@@ -77,27 +84,58 @@ with casa_col4:
     st.altair_chart(chart_metodos_casa, use_container_width=True)
 
 
-col_body1,col_body2 = st.columns(2)
+# col_body1,col_body2 = st.columns(2)
 
-with col_body1:
-    st.image('./img/westeros.jpeg',use_column_width="auto")
+# with col_body1:
+#     st.image('./img/westeros.jpeg',use_column_width="auto")
 
-with col_body2:
-    st.markdown("### Total De Execuções da Casa por Episódio- Cumulativo")
-    # Criar df cumulativo
-    deaths_df_casa = deaths_df[deaths_df["killers_house"] == casa]
-    num_execucoes_por_season_ep = deaths_df_casa.groupby(['season', 'episode']).size().reset_index()
-    num_execucoes_por_season_ep.columns = ['Temporada', 'Episódio', 'Execuções']
-    num_execucoes_por_season_ep['Cumulativo'] = num_execucoes_por_season_ep['Execuções'].cumsum()
-    num_execucoes_por_season_ep['Ep'] = 'S' + num_execucoes_por_season_ep['Temporada'].astype(str) + 'E' + num_execucoes_por_season_ep['Episódio'].astype(str)
+# with col_body2:
+st.markdown("### Total Cumulativo por Episódio - Execuções e Baixas")
+# Criar df cumulativo
+deaths_df_casa = deaths_df[deaths_df["killers_house"] == casa]
+num_execucoes_por_season_ep = deaths_df_casa.groupby(['season', 'episode']).size().reset_index()
+num_execucoes_por_season_ep.columns = ['Temporada', 'Episódio', 'Execuções']
+num_execucoes_por_season_ep['Acumulado-Execuções'] = num_execucoes_por_season_ep['Execuções'].cumsum()
+# Criar uma coluna temporadas e episódios em formato S0XE0Y
+num_execucoes_por_season_ep['Temporada'] = num_execucoes_por_season_ep['Temporada'].astype(str).apply(lambda x: x.zfill(2))
+num_execucoes_por_season_ep['Episódio'] = num_execucoes_por_season_ep['Episódio'].astype(str).apply(lambda x: x.zfill(2))
+num_execucoes_por_season_ep['Ep'] = 'S' + num_execucoes_por_season_ep['Temporada'] + 'E' + num_execucoes_por_season_ep['Episódio']
 
-    st.line_chart(num_execucoes_por_season_ep,x='Ep',y='Cumulativo',color = '#FF0000')
+baixas_df_casa = deaths_df[deaths_df["allegiance"] == casa]
+num_baixas_por_season_ep = baixas_df_casa.groupby(['season', 'episode']).size().reset_index()
+num_baixas_por_season_ep.columns = ['Temporada', 'Episódio', 'Baixas']
+num_baixas_por_season_ep['Acumulado-Baixas'] = num_baixas_por_season_ep['Baixas'].cumsum()
+# Criar uma coluna temporadas e episódios em formato S0XE0Y
+num_baixas_por_season_ep['Temporada'] = num_baixas_por_season_ep['Temporada'].astype(str).apply(lambda x: x.zfill(2))
+num_baixas_por_season_ep['Episódio'] = num_baixas_por_season_ep['Episódio'].astype(str).apply(lambda x: x.zfill(2))
+num_baixas_por_season_ep['Ep'] = 'S' + num_baixas_por_season_ep['Temporada'] + 'E' + num_baixas_por_season_ep['Episódio']
+
+# Criar um DF contendo todas as temporadas e episódios em formato S0XE0Y
+df_ep = deaths_df[['season','episode']].copy()
+df_ep['season'] = df_ep['season'].astype(str).apply(lambda x: x.zfill(2))
+df_ep['episode'] = df_ep['episode'].astype(str).apply(lambda x: x.zfill(2))
+df_ep['Ep'] = 'S' + df_ep['season'] + 'E' + df_ep['episode']
+df_ep = df_ep.drop_duplicates()
+
+df_cum = pd.merge(num_execucoes_por_season_ep[['Acumulado-Execuções','Ep']], num_baixas_por_season_ep[['Acumulado-Baixas','Ep']], 'outer', on='Ep')
+df_cum = pd.merge(df_ep['Ep'],df_cum, 'outer', on='Ep')
+# Preencher valores NaN com valores anteoriores para evitar 'buracos' na linha do gráfico
+df_cum['Acumulado-Execuções'] = df_cum['Acumulado-Execuções'].ffill()
+df_cum['Acumulado-Baixas'] = df_cum['Acumulado-Baixas'].ffill()
+
+# st.markdown("Execuções")
+# st.line_chart(num_execucoes_por_season_ep,x='Ep',y='Acumulado',color = '#FF0000')
+# st.markdown("Baixas")
+# st.line_chart(num_baixas_por_season_ep,x='Ep',y='Acumulado',color = '#3e5fe1')
+st.line_chart(df_cum,x='Ep',color=['#3e5fe1','#FF0000'])
 
 st.divider()
 
-col_bottom1,col_bottom2 = st.columns(2)
+
+st.markdown("# Top 10 Geral")
+col_bottom1,col_bottom2, col_bottom3 = st.columns(3)
 with col_bottom1:
-    st.markdown("## Top Executores")
+    st.markdown("### Executores")
 
     chart_executores_casa = (
     alt.Chart(top_executores_casa[:10]).mark_bar().encode(
@@ -112,11 +150,24 @@ with col_bottom1:
 
 
 with col_bottom2:
-    st.markdown("## Top Métodos")
+    st.markdown("### Métodos")
     chart_metodos_casa = (
         alt.Chart(top_metodos_casa[:10]).mark_bar().encode(
                 x='Contagem:Q',
                 y=alt.Y('Metodo:N').sort('-x'),
+                color=alt.value('red'),
+                # sort=alt.EncodingSortField(field="Contagem", op="count", order='ascending')
+            )
+    )
+
+    st.altair_chart(chart_metodos_casa, use_container_width=True)
+
+with col_bottom3:
+    st.markdown("### Baixas")
+    chart_metodos_casa = (
+        alt.Chart(top_baixas_casa[:10]).mark_bar().encode(
+                x='Contagem:Q',
+                y=alt.Y('Baixas:N').sort('-x'),
                 color=alt.value('red'),
                 # sort=alt.EncodingSortField(field="Contagem", op="count", order='ascending')
             )
