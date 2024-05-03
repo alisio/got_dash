@@ -88,3 +88,7 @@ def plotScatterKill(df,width=1200,height=2000):
 
     # Exibir o gráfico
     return scatter
+
+def centralizar(objeto):
+    import streamlit as st
+    return st.columns(3)[1].objeto
