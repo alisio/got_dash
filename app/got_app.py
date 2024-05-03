@@ -130,7 +130,8 @@ def pag_alianças():
 
 
 def app():
-    st.title("Os 7 reinos")
+    st.set_page_config(layout="wide")
+    st.title("The Seven Kingdoms")
     # Set up sidebar menu
     sidebar = st.sidebar
     selected_page = sidebar.selectbox("Selecione Uma Página", ["Dados", "Execuções","Alianças"])
