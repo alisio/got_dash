@@ -101,8 +101,8 @@ def plotScatterKill(df,width=1000,height=1000):
 
     # Criar o gráfico de dispersão com escala ajustada
     scatter = alt.Chart(counts).mark_circle().encode(
-        x=alt.X('killer:N', axis=alt.Axis(title='Assassino')),
-        y=alt.Y('name:N', axis=alt.Axis(title='Vítima')),
+        y=alt.Y('killer:N', axis=alt.Axis(title='Assassino')),
+        x=alt.X('name:N', axis=alt.Axis(title='Vítima')),
         color='location:N',
         size=alt.Size('count:Q',
                       scale=alt.Scale(domain=[min_count, max_count], range=[min_size, max_size]),
@@ -119,6 +119,16 @@ def plotScatterKill(df,width=1000,height=1000):
     # Exibir o gráfico
     return scatter
 
-# def get_new_df(lista_condicoes,df=deaths_df):
-#     for condicao in lista_condicoes:
-        
+# A função escala_numero recebe um número de entrada e dois limites, um inferior e um superior, 
+# que definem um intervalo. A função verifica se o número de entrada está dentro desse intervalo. 
+# Se não estiver, a função retorna uma mensagem de erro. Se estiver, 
+# a função calcula um novo número escalonado, usando a fórmula de interpolação linear, que está entre 500 e 1000.
+def escala_numero(numero, limite_inferior=1, limite_superior=40):
+    # Primeiro, verifica se o número de entrada está dentro do intervalo dado
+    if numero < limite_inferior or numero > limite_superior:
+        return "Erro: O número de entrada não está dentro do intervalo dado."
+
+    # Calcula o número escalonado
+    numero_escalonado = 400 + (numero - limite_inferior) * (1000 - 400) / (limite_superior - limite_inferior)
+    print(numero_escalonado)
+    return int(numero_escalonado)
