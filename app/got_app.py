@@ -6,7 +6,7 @@ import altair as alt
 import got_lib
 from got_lib import plotKillerMethod,deathsByAllegiance,plotScatterKill,deathsByCharacter
 import sys
-import seaborn as sns
+# import seaborn as sns
 
 deaths_df = pd.read_csv('./data/deaths.csv')
 
@@ -167,21 +167,32 @@ def pag_alianças():
             df_tmp = deaths_df
         else: 
             df_tmp = deaths_df[deaths_df['killers_house'].isin(casas_selecionadas)]
-            
+
         st.altair_chart(deathsByAllegiance(df_tmp), use_container_width=False, theme="streamlit")
     with aba_alianca_individuo:
-
         lista_executores = list(deaths_df["killer"].unique())
         lista_executores.sort()
-        lista_top_5_executores = list(top_executores['Executor'][:5])
-        executores_selecionados = st.multiselect('Selecione os Executores:',lista_executores,lista_top_5_executores)
-        df_tmp = deaths_df[deaths_df["killer"].isin(executores_selecionados)]
-        if len(df_tmp) == 0:
-            st.altair_chart(deathsByCharacter(deaths_df))
-        else:
-            st.altair_chart(deathsByCharacter(df_tmp))
+        lista_top_10_executores = list(top_executores['Executor'][:10])
+        lista_metodos = list(deaths_df[deaths_df.killer.isin(lista_top_10_executores)]["method"].unique())
+        df_tmp = deaths_df[deaths_df.killer.isin(lista_top_10_executores)].copy()
+        col_allegiance_1,col_allegiance_2 = st.columns(2)
 
-    
+        with col_allegiance_1:
+            executores_selecionados = st.multiselect('Selecione os Executores:',lista_top_10_executores)
+
+        with col_allegiance_2:
+            metodos_selecionados = st.multiselect('Selecione os Métodos:',lista_metodos)
+        
+        if len(metodos_selecionados) == 0:
+            metodos_selecionados = lista_metodos
+        if len(executores_selecionados) == 0:
+            executores_selecionados = lista_top_10_executores
+        
+        condicao1 = (df_tmp['killer'].isin(executores_selecionados))
+        condicao2 = (df_tmp['method'].isin(metodos_selecionados))
+        df_tmp = df_tmp[condicao1 & condicao2]
+        st.altair_chart(deathsByCharacter(df_tmp))
+            
 
 
 def app():
