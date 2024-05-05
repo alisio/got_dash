@@ -4,7 +4,7 @@ import streamlit as st
 import pandas as pd
 import altair as alt
 import got_lib
-from got_lib import plotKillerMethod,deathsByAllegiance,plotScatterKill,deathsByCharacter
+from got_lib import plotKillerMethod,deathsByAllegiance,plotScatterKill,deathsByCharacter,escala_numero
 import sys
 # import seaborn as sns
 
@@ -87,6 +87,7 @@ def pag_execucoes():
             st.altair_chart(plotKillerMethod(df_tmp, opcao,), use_container_width=True, theme="streamlit")
     with aba_exec_relacionamento:
         df_tmp = deaths_df.copy()
+        num_executores = len(deaths_df.killer.unique())
         lista_vitimas = list(df_tmp['name'].unique())
         lista_executores = list(df_tmp['killer'].unique())
         lista_locais = list(df_tmp['location'].unique())
@@ -107,7 +108,7 @@ def pag_execucoes():
             vitimas_selecionadas = st.multiselect('Seleção de Vítimas', lista_vitimas)
             col_exec_1,col_exec_2 = st.columns(2)
             with col_exec_2:
-                toggle_top_5_executores = st.toggle("Top 5 executores")
+                toggle_top_5_executores = st.toggle("Top 5 executores",value=True)
                 if toggle_top_5_executores:
                     with col_exec_1:
                         executores_selecionados = st.multiselect('Seleção de Executores', lista_executores,lista_top_5_executores)
@@ -133,20 +134,12 @@ def pag_execucoes():
         condicao_4 = (df_tmp['method'].isin(metodos_selecionados))
 
         df_tmp = df_tmp[condicao_1 & condicao_2 & condicao_3 & condicao_4]
-        # df_tmp
+        # Utilizar o numero de executores para definir tamanho do scatterplot dinamicamente
+        num_executores_base_selecionada = len(df_tmp.killer.unique())
         if len(df_tmp) == 0:
             st.markdown("Nenhum registro encontrado")
         else:
-            st.altair_chart(plotScatterKill(df_tmp), use_container_width=False, theme="streamlit")
-
-        # st.altair_chart(alt.Chart(df_tmp).mark_rect().encode(
-        #         x='killer:N',
-        #         y='name:N',
-        #         color='location:N'
-        #     )
-        # )
-
-
+            st.altair_chart(plotScatterKill(df_tmp,height=escala_numero(num_executores_base_selecionada,1,num_executores)), use_container_width=False, theme="streamlit")
 
 def pag_alianças():
     aba_alianca_casa,aba_alianca_individuo = st.tabs(["Aliança","Individuo"])
