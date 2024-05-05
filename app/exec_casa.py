@@ -41,7 +41,7 @@ top_baixas_casa.columns = ["Baixas","Contagem"]
 casa_col1, casa_col2, casa_col3, casa_col4 = st.columns(4)
 
 with casa_col1:
-    st.markdown("### Casa:")
+    st.markdown("### Aliança:")
     exibe_casas_principais = st.toggle('Somente Principais', key='casa')
     if exibe_casas_principais:
         casa = st.selectbox("Filtro", principais_casas,principais_casas.index('House Stark'))
@@ -68,7 +68,7 @@ with casa_col3:
 
     
 with casa_col4:
-    st.markdown("### Métodos:")
+    st.markdown("### Métodos (Top 3):")
     metodos_freq = deaths_df[deaths_df["killers_house"] == casa]["method"].value_counts().reset_index()
     metodos_freq.columns = ["Arma", "Contagem"]
     

@@ -19,19 +19,24 @@ custom_palette = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564
 def plotKillerMethod(df, killer_type):
     # Calcular o número de mortes por casa e método
     death_counts = df.groupby([killer_type, 'method']).size().reset_index(name='count')
+    if killer_type == 'killer':
+        titulo = "Assassino"
+    else:
+        titulo = "Aliança do Assassino"
 
     # Ordenar os dados pelo número de mortes
     death_counts_sorted = death_counts.sort_values(by='count', ascending=False)
 
     chart = alt.Chart(death_counts_sorted).mark_bar().encode(
         x=alt.X('count:Q', stack='normalize', axis=alt.Axis(title='Proporção')),
-        y=alt.Y(f'{killer_type}:N', sort='-x', axis=alt.Axis(title='Casa do Assassino')),
+        y=alt.Y(f'{killer_type}:N', sort='-x', axis=alt.Axis(title=titulo)),
         # color=alt.Color('method:N', scale=alt.Scale(scheme=color_scheme)),
         color=alt.Color('method:N', scale=alt.Scale(range=custom_palette)),
         tooltip=['method', 'count']
     ).properties(
         width=600,
-        title=f'Causador da Morte ({killer_type}) e método (Ordenado por Número de Mortes)'
+        height = 650,
+        title=f'Causador da Morte ({killer_type}) e método (Ordenado por Número de Execuções)'
     )
 
     # Exibir o gráfico
@@ -44,20 +49,45 @@ def deathsByAllegiance(df):
     # Criar o gráfico de barras empilhadas horizontal com interatividade
     bars = alt.Chart(counts).mark_bar().encode(
         y=alt.Y('season:N', axis=alt.Axis(title='Temporada')),
-        x=alt.X('sum(count):Q', axis=alt.Axis(title='Quantidade de Alianças')),
+        x=alt.X('sum(count):Q', axis=alt.Axis(title='Quantidade de Baixas por Alianças')),
         color=alt.Color('allegiance:N', legend=alt.Legend(title='Aliança')),
         tooltip=['season:N', 'allegiance:N', 'count:Q'],
-        row='name:N'
+        # row='name:N'
     ).properties(
         width=1000,
-        height=400,
-        title='Quantidade de Alianças por Temporada'
+        height=650,
+        title='Quantidade de Execuções Facção/Temporada'
     ).interactive()
 
     # Exibir o gráfico
     return bars
 
-def plotScatterKill(df,width=1200,height=2000):
+def deathsByCharacter(df):
+    # Calcular a contagem de alianças por temporada
+    counts = df.groupby(['killer', 'method']).size().reset_index(name='count')
+
+    # Ordenar os dados pelo número de ocorrências no eixo x
+    counts_sorted = counts.sort_values(by='count', ascending=False)
+
+    # Limitar aos 10 mais frequentes
+    counts_top10 = counts_sorted.head(10)
+
+    # Criar o gráfico de barras empilhadas horizontal com interatividade
+    bars = alt.Chart(counts_top10).mark_bar().encode(
+        y=alt.Y('killer:N', axis=alt.Axis(title='Personagem')),
+        x=alt.X('count:Q', axis=alt.Axis(title='Quantidade de Baixas por Alianças')),
+        color=alt.Color('method:N', legend=alt.Legend(title='Método')),
+        tooltip=['killer:N', 'method:N', 'count:Q']
+    ).properties(
+        width=600,
+        height=400,
+        title='Top 10 Personagens com Mais Execuções por Método'
+    ).interactive()
+
+    # Exibir o gráfico
+    return bars
+
+def plotScatterKill(df,width=1000,height=1000):
     # Calcular o número de assassinatos por combinação de 'killer', 'method' e 'location'
     counts = df.groupby(['name', 'killer', 'method', 'location']).size().reset_index(name='count')
 
@@ -89,6 +119,6 @@ def plotScatterKill(df,width=1200,height=2000):
     # Exibir o gráfico
     return scatter
 
-def centralizar(objeto):
-    import streamlit as st
-    return st.columns(3)[1].objeto
+# def get_new_df(lista_condicoes,df=deaths_df):
+#     for condicao in lista_condicoes:
+        
