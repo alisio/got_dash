@@ -12,19 +12,30 @@ deaths_df = pd.read_csv('./data/deaths.csv')
 
 # constantes
 img_path = "./img"
+largura_imagens = 200
 principais_personagens = [
     'Arya Stark', 'Cersei Lannister', 'Jon Snow', 'Olenna Tyrell', 'Sansa Stark', 'Tyrion Lannister', 'Bran Stark', 'Daenerys Targaryen', 'Jorah Mormont', 'Robb Stark', 'The High Sparrow', 'Catelyn Stark', 'Jaime Lannister', 'Littlefinger', 'Samwell Tarly', 'The Hound'
 ]
 principais_personagens.sort()
 
 texto_sidebar = """
+# Descrição
 Este dashboard está focado no dataset de mortes sobre a série de TV Game of Thrones. O enredo fictício dessa série trata da dispuda de poder entre várias famílias e outros agrupamentos ou alianças que nesse caderno vamos chamar de facções. Devido à natureza dessa disputa, várias baixas vão ocorrer ao longo dos episódios. As perguntas que podem surgir nesse sentido envolvem: 
 
 * Qual o personagem que mais causou mortes? 
 * Qual foi o método mais utilizado para este fim? 
-* Qual casa/facção sofreu mais baixas? 
+* Qual aliança sofreu mais baixas? 
 
 Vamos fazer uma análise com o auxílio da biblioteca streamlit.
+
+# Código fonte:
+https://github.com/alisio/got_dash
+
+# Reconhecimentos:
+* [Game of Thrones Datasets and Visualizations](https://github.com/jeffreylancaster/game-of-thrones)
+* Wikipedia
+
+
 """
 
 
@@ -55,17 +66,23 @@ with pers_col2:
     img_arq = f'{img_path}/{personagem.replace(" ","-")}.webp'    
     st.markdown("### Foto:")
     if os.path.isfile(img_arq):
-        st.image(img_arq)
+        st.image(img_arq, width=largura_imagens)
     else:
         st.image("./img/game_of_thrones.png")
 
 with pers_col3:
     num_execucoes = len(deaths_df[deaths_df["killer"] == personagem ])
+    casa = list(deaths_df[deaths_df["killer"] == personagem ]['killers_house'].unique())
     st.markdown("### Execuções:")
     st.markdown(f"## {num_execucoes}")
+    st.markdown("### Aliança:")
+    for i in casa:
+        # st.markdown(', '.join(casa))
+        st.markdown(f"- {i}")
+        # st.image(f"{img_path}/{i}.jpeg",width=50)
     
 with pers_col4:
-    st.markdown("### Métodos:")
+    st.markdown("### Métodos (Top 3):")
     metodos_freq = deaths_df[deaths_df["killer"] == personagem]["method"].value_counts().reset_index()
     metodos_freq.columns = ["Arma", "Contagem"]
     
