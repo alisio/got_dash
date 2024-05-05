@@ -45,7 +45,7 @@ lista_personagens.sort()
 top_executores = deaths_df['killer'].value_counts().reset_index()
 top_executores.columns = ["Executor","Contagem"]
 top_metodos = deaths_df['method'].value_counts().reset_index()
-top_metodos.columns = ["Metodo","Contagem"]
+top_metodos.columns = ["Método","Contagem"]
 
 # Página
 
@@ -84,11 +84,11 @@ with pers_col3:
 with pers_col4:
     st.markdown("### Métodos (Top 3):")
     metodos_freq = deaths_df[deaths_df["killer"] == personagem]["method"].value_counts().reset_index()
-    metodos_freq.columns = ["Arma", "Contagem"]
+    metodos_freq.columns = ["Métodos", "Contagem"]
     
     chart_metodos = (
         alt.Chart(metodos_freq[:3]).mark_bar().encode(
-            x=alt.X('Arma:N').sort('-y'),
+            x=alt.X('Métodos:N').sort('-y'),
             y=alt.Y('Contagem:Q'),
             color=alt.value('red'),
             # sort=alt.EncodingSortField(field="Contagem", op="count", order='ascending')
@@ -152,7 +152,7 @@ with col_bottom2:
     chart_metodos = (
         alt.Chart(top_metodos[:10]).mark_bar().encode(
                 x='Contagem:Q',
-                y=alt.Y('Metodo:N').sort('-x'),
+                y=alt.Y('Método:N').sort('-x'),
                 color=alt.value('red'),
                 # sort=alt.EncodingSortField(field="Contagem", op="count", order='ascending')
             )
