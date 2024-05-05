@@ -73,14 +73,14 @@ def deathsByCharacter(df):
     counts_top10 = counts_sorted.head(10)
 
     # Criar o gráfico de barras empilhadas horizontal com interatividade
-    bars = alt.Chart(counts_top10).mark_bar().encode(
+    bars = alt.Chart(counts_sorted).mark_bar().encode(
         y=alt.Y('killer:N', axis=alt.Axis(title='Personagem')),
         x=alt.X('count:Q', axis=alt.Axis(title='Quantidade de Baixas por Alianças')),
         color=alt.Color('method:N', legend=alt.Legend(title='Método')),
         tooltip=['killer:N', 'method:N', 'count:Q']
     ).properties(
-        width=600,
-        height=400,
+        width=1000,
+        height=600,
         title='Top 10 Personagens com Mais Execuções por Método'
     ).interactive()
 
