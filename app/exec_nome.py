@@ -28,14 +28,7 @@ Este dashboard está focado no dataset de mortes sobre a série de TV Game of Th
 
 Vamos fazer uma análise com o auxílio da biblioteca streamlit.
 
-# Código fonte:
-https://github.com/alisio/got_dash
-
-# Reconhecimentos:
-* [Game of Thrones Datasets and Visualizations](https://github.com/jeffreylancaster/game-of-thrones)
-* Wikipedia
-
-
+Mais informações na página "Sobre"
 """
 
 

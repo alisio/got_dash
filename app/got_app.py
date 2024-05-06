@@ -186,14 +186,34 @@ def pag_alianças():
         df_tmp = df_tmp[condicao1 & condicao2]
         st.altair_chart(deathsByCharacter(df_tmp))
             
+def pag_sobre():
+    texto = """
 
+    Para entusiastas de Game of Thrones e desenvolvedores Python. Este dashboard fornece uma interface interativa e fácil de usar para explorar e analisar um conjunto de dados abrangente contendo informações sobre personagens, casas, livros e temporadas.
+    
+    Este painel é um aplicativo web desenvolvido como trabalho do Curso de Especialização em Ciência de Dados, disciplina CD008 - Visualização de dados - Turma 3. Professor responsável: João Luiz Dihl Comba.
+
+    Equipe:
+    * Antonio Alisio de Meneses Cordeiro
+    * Jeferson Jose de Miranda
+    * Salvador Vicente Grisolia
+
+    ## Código fonte:
+    https://github.com/alisio/got_dash
+
+    ## Reconhecimentos:
+    * [Game of Thrones Datasets and Visualizations](https://github.com/jeffreylancaster/game-of-thrones)
+    * Wikipedia (imagens dos personagens)
+    * Midjourney (imagens dos personagens)
+    """
+    st.write(texto)
 
 def app():
     st.set_page_config(layout="wide")
     st.title("The Seven Kingdoms")
     # Set up sidebar menu
     sidebar = st.sidebar
-    selected_page = sidebar.selectbox("Selecione Uma Página", ["Resumo", "Execuções","Alianças"])
+    selected_page = sidebar.selectbox("Selecione Uma Página", ["Resumo", "Execuções","Alianças","Sobre"])
 
     if selected_page == "Resumo":
         pag_dados()
@@ -201,6 +221,8 @@ def app():
         pag_execucoes()
     elif selected_page == "Alianças":
         pag_alianças()
+    elif selected_page == "Sobre":
+        pag_sobre()
 
 app()
 
