@@ -32,7 +32,7 @@ deaths_df = deaths_df.fillna('')
 # %%
 
 
-def pag_dados():
+def pag_resumo():
     # st.title("Dados")
     # Add code for rendering data and interactivity specific to Page 1
     # deaths_df
@@ -185,7 +185,30 @@ def pag_alianças():
         condicao2 = (df_tmp['method'].isin(metodos_selecionados))
         df_tmp = df_tmp[condicao1 & condicao2]
         st.altair_chart(deathsByCharacter(df_tmp))
-            
+
+
+def pag_dados():
+
+
+
+    tabela = """
+
+    A tabela a seguir apresenta dados sobre as mortes ocorridas na série de televisão Game of Thrones, baseados no trabalho [Game of Thrones Datasets and Visualizations](https://github.com/jeffreylancaster/game-of-thrones), criada pelo autor Jeffrey Lancaster). Ela contém informações sobre cada morte, incluindo o nome da vítima, a aliança da vítima, a temporada e o episódio em que a morte ocorreu, a localização da morte, o nome do assassino, a casa do assassino, o método utilizado para causar a morte e um identificador único para cada morte. Essa tabela é uma ferramenta para quem deseja analisar padrões de execuções da série, identificar quais personagens ou alianças são mais propensos a serem mortos, entender quais métodos são mais comumente utilizados para causar mortes, etc. A seguir, serão descritas cada uma das variáveis contidas na tabela.
+
+    |Variável|Descrição|
+    |-|-|
+    |name|Nome da vítima|
+    |allegiance | Aliança da vítima|
+    |season|Número da Temporada|
+    |episode|Número do episódio|
+    |location|localização da morte|
+    |killer|Nome do Assassino|
+    |killers house|Nome da casa/aliança/facção do assassino)|
+    |method|Método empregado na execução|
+    |death no|Identificador único do evento de execução|
+    """
+    st.markdown(tabela)
+
 def pag_sobre():
     texto = """
 
@@ -213,14 +236,16 @@ def app():
     st.title("The Seven Kingdoms")
     # Set up sidebar menu
     sidebar = st.sidebar
-    selected_page = sidebar.selectbox("Selecione Uma Página", ["Resumo", "Execuções","Alianças","Sobre"])
+    selected_page = sidebar.selectbox("Selecione Uma Página", ["Resumo", "Execuções","Alianças","Dados","Sobre"])
 
     if selected_page == "Resumo":
-        pag_dados()
+        pag_resumo()
     if selected_page == "Execuções":
         pag_execucoes()
     elif selected_page == "Alianças":
         pag_alianças()
+    elif selected_page == "Dados":
+        pag_dados()
     elif selected_page == "Sobre":
         pag_sobre()
 
