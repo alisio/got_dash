@@ -1,11 +1,5 @@
 FROM python:3.10-slim
 
-WORKDIR /app
-
-COPY app/* ./
-COPY app/data* ./data
-COPY app/img* ./img
-
 RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
@@ -13,6 +7,11 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
+WORKDIR /app
+
+COPY app/* ./
+COPY app/data* ./data
+COPY app/img* ./img
 
 RUN pip3 install -r requirements.txt
 

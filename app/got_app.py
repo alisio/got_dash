@@ -53,8 +53,9 @@ def pag_execucoes():
         Esta página tem o objetivo de responder a perguntas relacionadas ao número de execuções causadas por alianças ou indivíduos, o método de execução utilizado, e o relacionamento entre executores, vítimas e locais de execução em Game of Thrones. As questões específicas que podem ser respondidas incluem:
 
         * Qual aliança ou indivíduo foi responsável pelo maior número de execuções?
-        * Qual foi o método de execução preferido por Ramsay Bolton?
+        * Qual o método de execução mais empregado pelo personagem que causou mais baixas?
         * Quem executou Tywin Lannister, onde e como?
+        
     
         """
     st.sidebar.image('./img/alisiomeneses_an_image_conveying_an_execution_in_westeros_feabeb8b-eec4-4de7-a50b-4c19f9c977ac.png')
@@ -66,6 +67,7 @@ def pag_execucoes():
     aba_exec_casa,aba_exec_individuo,aba_exec_relacionamento = st.tabs(["Aliança","Individuo","Relacionamento"])
     with aba_exec_casa:
         lista_casas = list(deaths_df["killers_house"].unique())
+        # principais_casas_toggle = st.toggle("Principais Casas", value=True)
         casas_selecionadas = st.multiselect('Selecione as Alianças:',lista_casas,principais_casas)
         opcao = 'killers_house'
         df_tmp = deaths_df[deaths_df['killers_house'].isin(casas_selecionadas)]
@@ -141,6 +143,23 @@ def pag_execucoes():
         else:
             st.altair_chart(plotScatterKill(df_tmp,height=escala_numero(num_executores_base_selecionada,1,num_executores)), use_container_width=False, theme="streamlit")
 
+        st.markdown("### Localizações Onde Ocorreram Mais Mortes (Top 10):")
+        local_freq = deaths_df["location"].value_counts().reset_index()
+        local_freq.columns = ["Local", "Contagem"]
+
+        chart_top_localizacoes = (
+            alt.Chart(local_freq[:10]).mark_bar().encode(
+                x=alt.X('Local:N').sort('-y'),
+                y=alt.Y('Contagem:Q'),
+                color=alt.value('red'),
+                # sort=alt.EncodingSortField(field="Contagem", op="count", order='ascending')
+            )
+        )
+
+    st.altair_chart(chart_top_localizacoes, use_container_width=True)
+
+
+
 def pag_alianças():
     aba_alianca_casa,aba_alianca_individuo = st.tabs(["Aliança","Individuo"])
     texto_sidebar = """
@@ -193,7 +212,7 @@ def pag_dados():
 
     tabela = """
 
-    A tabela a seguir apresenta dados sobre as mortes ocorridas na série de televisão Game of Thrones, baseados no trabalho [Game of Thrones Datasets and Visualizations](https://github.com/jeffreylancaster/game-of-thrones), criada pelo autor Jeffrey Lancaster). Ela contém informações sobre cada morte, incluindo o nome da vítima, a aliança da vítima, a temporada e o episódio em que a morte ocorreu, a localização da morte, o nome do assassino, a casa do assassino, o método utilizado para causar a morte e um identificador único para cada morte. Essa tabela é uma ferramenta para quem deseja analisar padrões de execuções da série, identificar quais personagens ou alianças são mais propensos a serem mortos, entender quais métodos são mais comumente utilizados para causar mortes, etc. A seguir, serão descritas cada uma das variáveis contidas na tabela.
+    A tabela a seguir apresenta dados sobre as mortes ocorridas na série de televisão Game of Thrones, baseados no trabalho [Game Of Thrones Death](https://data.world/datasaurusrex), criada pelo autor David Morphy. Ela contém informações sobre cada morte, incluindo o nome da vítima, a aliança da vítima, a temporada e o episódio em que a morte ocorreu, a localização da morte, o nome do assassino, a casa do assassino, o método utilizado para causar a morte e um identificador único para cada morte. Essa tabela é uma ferramenta para quem deseja analisar padrões de execuções da série, identificar quais personagens ou alianças são mais propensos a serem mortos, entender quais métodos são mais comumente utilizados para causar mortes, etc. A seguir, serão descritas cada uma das variáveis contidas na tabela.
 
     |Variável|Descrição|
     |-|-|
@@ -225,9 +244,9 @@ def pag_sobre():
     https://github.com/alisio/got_dash
 
     ## Reconhecimentos:
-    * [Game of Thrones Datasets and Visualizations](https://github.com/jeffreylancaster/game-of-thrones)
-    * Wikipedia (imagens dos personagens)
-    * Midjourney (imagens dos personagens)
+    * [Game Of Thrones Death](https://data.world/datasaurusrex)
+    * Images dos personagens: [Geeks Fpr Geeks](https://www.geeksforgeeks.org/all-52-game-of-thrones-main-characters-ranked/)
+    * Imagens geradas: Midjourney
     """
     st.write(texto)
 

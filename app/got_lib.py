@@ -56,7 +56,7 @@ def deathsByAllegiance(df):
     ).properties(
         width=1000,
         height=650,
-        title='Quantidade de Execuções Facção/Temporada'
+        title='Quantidade de Execuções por Alianças, por temporadaTemporada'
     ).interactive()
 
     # Exibir o gráfico
