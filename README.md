@@ -51,6 +51,7 @@ The dataset used in this application is provided by [Jeffrey Lancaster's Game of
 This project is licensed under the MIT License - see the [LICENSE]() file for details.
 
 # Acknowledgments
-* Jeffrey Lancaster: https://github.com/jeffreylancaster/game-of-thrones
-
-
+* Data: [Game Of Thrones Death](https://data.world/datasaurusrex)
+* Character Images: [Geeks For Geeks](https://www.geeksforgeeks.org/all-52-game-of-thrones-main-characters-ranked/)
+* House posters images: [Films - Las Casas](https://www.pinterest.es/pin/47780446021705562/).
+* Additional images: Midjourney.
