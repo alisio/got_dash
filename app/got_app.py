@@ -212,7 +212,7 @@ def pag_dados():
 
     tabela = """
 
-    A tabela a seguir apresenta dados sobre as mortes ocorridas na série de televisão Game of Thrones, baseados no trabalho [Game Of Thrones Death](https://data.world/datasaurusrex), criada pelo autor David Morphy. Ela contém informações sobre cada morte, incluindo o nome da vítima, a aliança da vítima, a temporada e o episódio em que a morte ocorreu, a localização da morte, o nome do assassino, a casa do assassino, o método utilizado para causar a morte e um identificador único para cada morte. Essa tabela é uma ferramenta para quem deseja analisar padrões de execuções da série, identificar quais personagens ou alianças são mais propensos a serem mortos, entender quais métodos são mais comumente utilizados para causar mortes, etc. A seguir, serão descritas cada uma das variáveis contidas na tabela.
+    A tabela a seguir apresenta dados sobre as mortes ocorridas na série de televisão Game of Thrones, baseados no trabalho [Game Of Thrones Death](https://data.world/datasaurusrex), criada pelo autor David Murphy. Ela contém informações sobre cada morte, incluindo o nome da vítima, a aliança da vítima, a temporada e o episódio em que a morte ocorreu, a localização da morte, o nome do assassino, a casa do assassino, o método utilizado para causar a morte e um identificador único para cada morte. Essa tabela é uma ferramenta para quem deseja analisar padrões de execuções da série, identificar quais personagens ou alianças são mais propensos a serem mortos, entender quais métodos são mais comumente utilizados para causar mortes, etc. A seguir, serão descritas cada uma das variáveis contidas na tabela.
 
     |Variável|Descrição|
     |-|-|
@@ -245,8 +245,14 @@ def pag_sobre():
 
     ## Reconhecimentos:
     * [Game Of Thrones Death](https://data.world/datasaurusrex)
-    * Images dos personagens: [Geeks Fpr Geeks](https://www.geeksforgeeks.org/all-52-game-of-thrones-main-characters-ranked/)
+    * Images dos personagens: [Geeks For Geeks](https://www.geeksforgeeks.org/all-52-game-of-thrones-main-characters-ranked/)
     * Imagens geradas: Midjourney
+
+    * Dados: [Game Of Thrones Death](https://data.world/datasaurusrex)
+    * Imagens dos personagens: [Geeks For Geeks](https://www.geeksforgeeks.org/all-52-game-of-thrones-main-characters-ranked/)
+    * Imagens dos posters das casas: [Films - Las Casas](https://www.pinterest.es/pin/47780446021705562/).
+    * Imagens Adicionais: Midjourney.
+
     """
     st.write(texto)
 
@@ -285,3 +291,4 @@ background_image = """
 """
 
 st.markdown(background_image, unsafe_allow_html=True)
+# %%
